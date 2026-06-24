@@ -294,7 +294,6 @@ export default function VideoDetail() {
                               <button
                                 key={src.id}
                                 id={`citation-chip-${src.id}`}
-                                onClick={() => handleCitationClick(src.id)}
                                 className="inline-flex items-center gap-1 bg-[#222222] hover:bg-[#2c2c2c] text-[#b8b8b8] px-2 py-1 rounded text-[10px] font-semibold border border-slate-800 transition-colors"
                               >
                                 <Clock className="w-3.5 h-3.5 text-[#b8b8b8]" />
