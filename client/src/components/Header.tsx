@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Video, User, Settings, LogOut, Library, LayoutDashboard, ChevronDown } from 'lucide-react';
+import { User, Settings, LogOut, Library, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Header() {

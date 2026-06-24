@@ -25,8 +25,8 @@ export interface Session {
 
 export interface Source {
   id: string;
-  start_time: string;
-  end_time: string;   
+  start_time: number;
+  end_time: number;   
   text: string;
 }
 
@@ -36,6 +36,13 @@ export interface Message {
   role: 'user' | 'assistant';
   content: string;
   created_at: string;
+  sources?: Source[];
+}
+
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
   sources?: Source[];
 }
 
@@ -49,4 +56,9 @@ export interface ImportVideoResponse {
   id: string;
   title: string;
   status: 'processing' | 'processed';
+}
+
+export interface ChatResponse {
+  answer: string;
+  sources: Source[];
 }

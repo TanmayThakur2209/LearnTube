@@ -1,9 +1,9 @@
 import api from "./api";
-import type { Message } from "../types";
+import type { ChatResponse } from "../types";
 
 export const chatService = {
-  async chatVideo(videoId: string, question: string): Promise<Message> {
-    const response = await api.post<Message>(
+  async chatVideo(videoId: string, question: string): Promise<ChatResponse> {
+    const response = await api.post<ChatResponse>(
       `/videos/${videoId}/chat`,
       {
         question,

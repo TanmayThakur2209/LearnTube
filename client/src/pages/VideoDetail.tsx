@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { videoService } from '../services/video';
 import { chatService } from '../services/chat';
-import type { Video, Message, Source } from '../types';
+import type { Video, ChatMessage, Source } from '../types';
 import Header from '../components/Header';
 
 export default function VideoDetail() {
@@ -21,7 +21,7 @@ export default function VideoDetail() {
 
   // Core domain state
   const [video, setVideo] = useState<Video | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const [videoLoading, setVideoLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
@@ -29,9 +29,6 @@ export default function VideoDetail() {
   const [inputText, setInputText] = useState("");
 
   const [activeSources, setActiveSources] = useState<Source[]>([]);
-  const [highlightedSourceId, setHighlightedSourceId] =
-    useState<string | null>(null);
-
   const messageEndRef = useRef<HTMLDivElement>(null);
   const activeSourcesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +78,7 @@ export default function VideoDetail() {
 
     setIsSending(true);
 
-    const userMessage: Message = {
+    const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
       role: "user",
       content: text,
@@ -91,7 +88,7 @@ export default function VideoDetail() {
 
     const botId = `bot-${Date.now()}`;
 
-    const botPlaceholder: Message = {
+    const botPlaceholder: ChatMessage = {
       id: botId,
       role: "assistant",
       content: "",
@@ -145,21 +142,6 @@ export default function VideoDetail() {
       );
 
       setIsSending(false);
-    }
-  };
-
-  const handleCitationClick = (sourceId: string) => {
-    setHighlightedSourceId(sourceId);
-
-    const element = document.getElementById(
-      `source-item-${sourceId}`
-    );
-
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
     }
   };
 
