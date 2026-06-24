@@ -1,9 +1,7 @@
 from sentence_transformers import CrossEncoder
 
-# Loaded once when the app starts
-model = CrossEncoder(
-    "BAAI/bge-reranker-base"
-)
+
+model = CrossEncoder("BAAI/bge-reranker-base")
 
 
 class RerankerService:
