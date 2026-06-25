@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from "/src/assets/logo.svg"
+import logo1 from "/src/assets/logo1.svg"
 import { 
   Search, 
   Plus, 
@@ -97,7 +99,7 @@ export default function Dashboard() {
           
           <div className="z-20 space-y-2 relative">
             <div className="inline-flex items-center gap-1.5 border border-[#494949] px-3 py-1 rounded-full text-xs font-semibold">
-              <img src='src/assets/logo1.svg' className="w-3.5 h-3.5" /> Workspace Active
+              <img src={logo1} className="w-3.5 h-3.5" /> Workspace Active
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white">
               Welcome back, {user?.name || user?.email?.split('@')[0]}!
@@ -259,7 +261,7 @@ export default function Dashboard() {
 
               <div className="space-y-2">
                 <div className="bg-[#ffffff] w-10 p-2 rounded-xl inline-flex">
-                  <img src='src/assets/logo.svg'/>
+                  <img src={logo}/>
                 </div>
                 <h3 className="text-lg font-bold text-white tracking-tight">Import YouTube Video</h3>
                 <p className="text-black-400 text-xs">

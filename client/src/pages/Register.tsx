@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, AlertCircle, ArrowRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import logo from "/src/assets/logo.svg"
 
 export default function Register() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export default function Register() {
       >
         <div className="flex flex-col items-center gap-2 mb-8 cursor-pointer" onClick={() => navigate('/')}>
           <div className="p-2.5 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/10">
-            <img src="src/assets/logo.svg" className="w-13 h-13 bg-[#ffffff] rounded-xl p-2" />
+            <img src={logo} className="w-13 h-13 bg-[#ffffff] rounded-xl p-2" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-1.5">
             LearnTube <span className="text-xs bg-indigo-500/10 text-indigo-400 px-1.5 py-0.5 rounded-full border border-indigo-500/20 font-medium font-mono">AI</span>

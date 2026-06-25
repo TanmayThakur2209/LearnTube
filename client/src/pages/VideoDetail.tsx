@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import logo1 from "/src/assets/logo1.svg"
 import { 
   Clock, 
   Send, 
@@ -248,7 +249,7 @@ export default function VideoDetail() {
              {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center p-6 text-center space-y-4 max-w-md mx-auto">
                 <div className="w-12 h-12 bg-indigo-950/20 border border-indigo-900/30 rounded-2xl flex items-center justify-center text-indigo-400">
-                  <img src='/src/assets/logo1.svg' />
+                  <img src={logo1}/>
                 </div>
                 <div className="space-y-1.5">
                   <p className="font-bold text-white text-sm">Welcome to active video study tracks!</p>

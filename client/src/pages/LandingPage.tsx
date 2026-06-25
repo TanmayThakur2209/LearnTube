@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import logo from "/src/assets/logo.svg"
+import logo1 from "/src/assets/logo1.svg"
 import { 
   MessageSquare, 
   Bookmark, 
@@ -53,7 +55,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
             <div className="p-1 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <img src="src/assets/logo.svg" className="w-10 h-10 bg-[#ffffff] rounded-xl p-2" />
+              <img src={logo} className="w-10 h-10 bg-[#ffffff] rounded-xl p-2" />
             </div>
             <span className="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
               LearnTube <span className="text-xs px-1.5 py-0.5 rounded-lg border border-[#565656] font-medium">AI</span>
@@ -190,7 +192,7 @@ export default function LandingPage() {
                   <div className="space-y-3">
                     <div className="space-y-1.5 max-w-[85%] bg-[#121212] border border-indigo-950/40 rounded-lg p-2.5">
                       <div className="flex items-center gap-1 text-[10px] text-[#b9b9b9] font-mono">
-                        <img src="src/assets/logo1.svg" className="w-3 h-3" /> LearnTube Assistant
+                        <img src={logo1} className="w-3 h-3" /> LearnTube Assistant
                       </div>
                       <p className="text-[11px] leading-relaxed text-[#aeaeae]">
                         Combine the strengths of people through positive teamwork, so as to achieve goals no one person could have done alone. Get the best performance out of a group of people through encouraging meaningful contribution, and modeling inspirational and supportive leadership.

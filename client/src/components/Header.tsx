@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { User, Settings, LogOut, Library, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import logo from "/src/assets/logo.svg"
 
 export default function Header() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function Header() {
           id="header-logo"
         >
           <div className="rounded-lg flex items-center justify-center">
-            <img src="/src/assets/logo.svg" className="w-10 h-10 bg-[#ffffff] rounded-xl p-2" />
+            <img src={logo} className="w-10 h-10 bg-[#ffffff] rounded-xl p-2" />
           </div>
           <span className="text-lg font-bold tracking-tight text-zinc-100 flex items-center gap-1">
             LearnTube 
