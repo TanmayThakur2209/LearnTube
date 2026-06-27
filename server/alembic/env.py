@@ -11,10 +11,14 @@ from app.db import models
 # Alembic Config object
 config = context.config
 
-# Override the URL from alembic.ini using our settings
+alembic_url = settings.DATABASE_URL.replace(
+    "postgresql+asyncpg://",
+    "postgresql://",
+)
+
 config.set_main_option(
     "sqlalchemy.url",
-    settings.ALEMBIC_DATABASE_URL,
+    alembic_url,
 )
 
 # Configure logging
