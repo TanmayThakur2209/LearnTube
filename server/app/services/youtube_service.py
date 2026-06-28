@@ -28,7 +28,7 @@ class YouTubeService:
         youtube = build(
             "youtube",
             "v3",
-            developerKey=settings.GOOGLE_API_KEY,
+            developerKey=settings.YOUTUBE_API_KEY,
         )
 
         response = youtube.videos().list(
