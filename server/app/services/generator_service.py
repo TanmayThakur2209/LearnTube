@@ -1,8 +1,11 @@
-import requests
-import json
-import httpx
+from google import genai
 
+from app.core.config import settings
 from app.prompts.rag_prompt import build_prompt
+
+client = genai.Client(
+    api_key=settings.GOOGLE_API_KEY,
+)
 
 
 class GeneratorService:
@@ -12,7 +15,7 @@ class GeneratorService:
         context: str,
         question: str,
         history: str,
-        ) -> str:
+    ) -> str:
 
         prompt = build_prompt(
             context=context,
@@ -24,21 +27,12 @@ class GeneratorService:
         print(prompt)
         print("=" * 80)
 
-        response = requests.post(
-            "http://localhost:11434/api/generate",
-            json={
-                "model": "qwen2.5:7b-instruct",
-                "prompt": prompt,
-                "stream": False,
-            },
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
         )
 
-        response.raise_for_status()
-
-        data = response.json()
-
-        return data.get("response", "")
-
+        return response.text or ""
 
     @staticmethod
     async def stream_generate(
@@ -56,24 +50,11 @@ class GeneratorService:
         print(prompt)
         print("=" * 80)
 
-        async with httpx.AsyncClient(timeout=None) as client:
+        stream = client.models.generate_content_stream(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
 
-            async with client.stream(
-                "POST",
-                "http://localhost:11434/api/generate",
-                json={
-                    "model": "qwen2.5:7b-instruct",
-                    "prompt": prompt,
-                    "stream": True,
-                },
-            ) as response:
-
-                async for line in response.aiter_lines():
-
-                    if not line:
-                        continue
-
-                    data = json.loads(line)
-
-                    if "response" in data:
-                        yield data["response"]
+        for chunk in stream:
+            if chunk.text:
+                yield chunk.text
