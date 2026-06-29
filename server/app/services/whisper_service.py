@@ -3,27 +3,29 @@ import whisper
 
 class WhisperService:
 
-    model = whisper.load_model("base")
+    _model = None
 
+    @classmethod
+    def get_model(cls):
+        if cls._model is None:
+            cls._model = whisper.load_model("tiny")
+        return cls._model
 
     @classmethod
     def transcribe(cls, audio_path):
 
-        result = cls.model.transcribe(
+        model = cls.get_model()
+
+        result = model.transcribe(
             audio_path,
             fp16=False,
         )
 
-        segments = []
-
-        for s in result["segments"]:
-
-            segments.append(
-                {
-                    "text": s["text"],
-                    "start": s["start"],
-                    "end": s["end"],
-                }
-            )
-
-        return segments
+        return [
+            {
+                "text": s["text"],
+                "start": s["start"],
+                "end": s["end"],
+            }
+            for s in result["segments"]
+        ]
