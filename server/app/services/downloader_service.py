@@ -44,5 +44,7 @@ class DownloaderService:
             if os.path.exists(path):
                 subtitle = path
                 break
-
+        print(info)
+        print("Audio:", audio)  
+        print("Subtitle:", subtitle)
         return audio, subtitle
