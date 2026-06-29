@@ -1,6 +1,6 @@
 from sentence_transformers import CrossEncoder
 
-model = CrossEncoder("BAAI/bge-reranker-small")
+model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 class RerankerService:
 
     @staticmethod
