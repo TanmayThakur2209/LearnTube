@@ -1,8 +1,6 @@
 from sentence_transformers import CrossEncoder
 
-
-
-
+model = CrossEncoder("BAAI/bge-reranker-base")
 class RerankerService:
 
     @staticmethod
@@ -23,7 +21,6 @@ class RerankerService:
             for chunk in chunks
         ]
 
-        model = CrossEncoder("BAAI/bge-reranker-base")
         scores = model.predict(
             pairs,
             show_progress_bar=False,

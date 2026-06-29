@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     GOOGLE_API_KEY: str = ""
     YOUTUBE_API_KEY: str = ""
+    PROXY_HOST: str = ""
+    PROXY_PORT: int = 0
+    PROXY_USERNAME: str = ""
+    PROXY_PASSWORD: str = ""
 
 @lru_cache
 def get_settings():

@@ -37,7 +37,7 @@ async def process(video_id: str):
             return
 
         segments = TranscriptService.get_transcript_segments(
-            video.youtube_video_id
+            f"https://www.youtube.com/watch?v={video.youtube_video_id}"
         )
         print("#"*50)
 

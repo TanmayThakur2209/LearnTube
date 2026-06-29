@@ -1,23 +1,22 @@
-from youtube_transcript_api import YouTubeTranscriptApi
+import os
+
+from app.services.downloader_service import DownloaderService
+from app.services.whisper_service import WhisperService
 
 
 class TranscriptService:
 
     @staticmethod
-    def get_transcript(video_id: str) -> str:
-        api = YouTubeTranscriptApi()
+    def get_transcript_segments(video_url):
 
-        transcript = api.fetch(video_id)
+        audio, subtitle = DownloaderService.download(video_url)
 
-        return " ".join(
-            snippet.text
-            for snippet in transcript
-        )
-    
-    @staticmethod
-    def get_transcript_segments(video_id: str):
-        api = YouTubeTranscriptApi()
+        segments = WhisperService.transcribe(audio)
 
-        transcript = api.fetch(video_id)
+        if audio and os.path.exists(audio):
+            os.remove(audio)
 
-        return transcript
+        if subtitle and os.path.exists(subtitle):
+            os.remove(subtitle)
+
+        return segments
