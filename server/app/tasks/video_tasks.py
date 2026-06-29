@@ -35,11 +35,15 @@ async def process(video_id: str):
         if not video:
             print("Video not found")
             return
+        
+        print("Starting transcript extraction")
 
         segments = TranscriptService.get_transcript_segments(
             f"https://www.youtube.com/watch?v={video.youtube_video_id}"
         )
         print("#"*50)
+        print("Transcript extracted")
+        print("Segments:", len(segments))
 
         chunks = ChunkingService.chunk_segments(segments)
 
