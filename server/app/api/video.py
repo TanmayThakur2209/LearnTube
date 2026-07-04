@@ -234,6 +234,7 @@ async def stream_chat_with_video(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+
     video = await VideoRepository.get_by_id(
         db=db,
         video_id=video_id,
@@ -255,25 +256,18 @@ async def stream_chat_with_video(
         db=db,
         video_id=video_id,
         query=payload.question,
+        candidate_limit=20,
+        final_limit=5,
     )
 
-    context = "\n\n".join(
-        f"""
-            Timestamp: {int(chunk.start_time // 60):02d}:{int(chunk.start_time % 60):02d}
-            to
-            {int(chunk.end_time // 60):02d}:{int(chunk.end_time % 60):02d}
-
-            {chunk.content}
-        """
-        for chunk in chunks
-    )
+    context = RetrievalService.build_context(chunks)
 
     session = await ChatSessionRepository.get_or_create(
         db=db,
         video_id=video_id,
         user_id=current_user.id,
     )
-    
+
     await ChatMessageRepository.create(
         db=db,
         session_id=session.id,
@@ -289,33 +283,40 @@ async def stream_chat_with_video(
     )
 
     history_text = "\n".join(
-        f"{msg.role.capitalize()}: {msg.content}"
-        for msg in history
+        f"{m.role.capitalize()}: {m.content}"
+        for m in history
     )
 
     async def generate():
 
         full_answer = ""
 
-        async for token in GeneratorService.stream_generate(
-            context=context,
-            question=payload.question,
-            history=history_text,
-        ):
-            full_answer += token
-            yield token
+        try:
 
-        await ChatMessageRepository.create(
-            db=db,
-            session_id=session.id,
-            role="assistant",
-            content=full_answer,
-        )
+            async for token in GeneratorService.stream_generate(
+                context=context,
+                question=payload.question,
+                history=history_text,
+            ):
 
-        await db.commit()
+                full_answer += token
+
+                yield f"data: {token}\n\n"
+
+        finally:
+
+            if full_answer:
+
+                await ChatMessageRepository.create(
+                    db=db,
+                    session_id=session.id,
+                    role="assistant",
+                    content=full_answer,
+                )
+
+                await db.commit()
 
     return StreamingResponse(
         generate(),
-        media_type="text/plain",
+        media_type="text/event-stream",
     )
-

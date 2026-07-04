@@ -1,8 +1,6 @@
 from urllib.parse import parse_qs, urlparse
 
-from googleapiclient.discovery import build
-
-from app.core.config import settings
+import yt_dlp
 
 
 class YouTubeService:
@@ -10,10 +8,7 @@ class YouTubeService:
     def extract_video_id(url: str) -> str:
         parsed = urlparse(url)
 
-        if parsed.hostname in (
-            "www.youtube.com",
-            "youtube.com",
-        ):
+        if parsed.hostname in ("www.youtube.com", "youtube.com"):
             return parse_qs(parsed.query)["v"][0]
 
         if parsed.hostname == "youtu.be":
@@ -23,40 +18,19 @@ class YouTubeService:
 
     @staticmethod
     def get_video_info(url: str) -> dict:
-        video_id = YouTubeService.extract_video_id(url)
+        ydl_opts = {
+            "quiet": True,
+            "no_warnings": True,
+            "skip_download": True,
+        }
 
-        youtube = build(
-            "youtube",
-            "v3",
-            developerKey=settings.YOUTUBE_API_KEY,
-        )
-
-        response = youtube.videos().list(
-            part="snippet",
-            id=video_id,
-        ).execute()
-
-        items = response.get("items", [])
-
-        if not items:
-            raise ValueError("Video not found")
-
-        snippet = items[0]["snippet"]
-
-        thumbnails = snippet.get("thumbnails", {})
-
-        thumbnail_url = None
-        if "high" in thumbnails:
-            thumbnail_url = thumbnails["high"]["url"]
-        elif "medium" in thumbnails:
-            thumbnail_url = thumbnails["medium"]["url"]
-        elif "default" in thumbnails:
-            thumbnail_url = thumbnails["default"]["url"]
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
 
         return {
-            "youtube_video_id": video_id,
-            "title": snippet["title"],
-            "description": snippet.get("description"),
-            "channel_name": snippet["channelTitle"],
-            "thumbnail_url": thumbnail_url,
+            "youtube_video_id": info["id"],
+            "title": info.get("title"),
+            "description": info.get("description"),
+            "channel_name": info.get("uploader"),
+            "thumbnail_url": info.get("thumbnail"),
         }

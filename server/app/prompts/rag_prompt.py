@@ -15,7 +15,7 @@ def build_prompt(context: str, question: str, history: str) -> str:
             - Keep the answer concise but complete.
             - If appropriate, organize the answer into bullet points.
             - If the context contains timestamps, naturally mention them in your explanation.
-            - If you cannot find answer in the context reply "can't find relevant information in the video"
+        
             ------------------------
             Context:
 

@@ -1,23 +1,63 @@
-from youtube_transcript_api import YouTubeTranscriptApi
+import os
+import webvtt
+
+from app.services.downloader_service import DownloaderService
 
 
 class TranscriptService:
 
     @staticmethod
-    def get_transcript(video_id: str) -> str:
-        api = YouTubeTranscriptApi()
+    def get_transcript_segments(video_url):
 
-        transcript = api.fetch(video_id)
-
-        return " ".join(
-            snippet.text
-            for snippet in transcript
+        subtitle = DownloaderService.download_subtitles(
+            video_url
         )
-    
+
+        segments = []
+        previous = ""
+
+        for caption in webvtt.read(subtitle):
+            start = TranscriptService.to_seconds(caption.start)
+            end = TranscriptService.to_seconds(caption.end)
+
+
+            normalized = "\n".join(
+                dict.fromkeys(caption.text.splitlines())
+            ).strip()
+
+            normalized = " ".join(normalized.split())
+
+            text = normalized
+
+            if previous and text.startswith(previous):
+                text = text[len(previous):].strip()
+
+            previous = normalized
+
+            if not text:
+                continue
+        
+
+            segments.append(
+                {
+                    "text": text,
+                    "start": start,
+                    "end": end,
+                }
+            )
+            
+
+        os.remove(subtitle)
+
+        return segments
+
     @staticmethod
-    def get_transcript_segments(video_id: str):
-        api = YouTubeTranscriptApi()
+    def to_seconds(timestamp):
 
-        transcript = api.fetch(video_id)
+        h, m, s = timestamp.split(":")
 
-        return transcript
+        return (
+            int(h) * 3600
+            + int(m) * 60
+            + float(s)
+        )

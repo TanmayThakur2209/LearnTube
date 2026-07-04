@@ -54,7 +54,6 @@ class GeneratorService:
             model="gemini-2.5-flash",
             contents=prompt,
         )
-
         for chunk in stream:
             if chunk.text:
                 yield chunk.text

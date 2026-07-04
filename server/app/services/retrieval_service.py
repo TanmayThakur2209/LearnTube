@@ -1,8 +1,9 @@
-import asyncio
 from uuid import UUID
+import asyncio
 from app.repositories.transcript_chunk_repository import TranscriptChunkRepository
 from app.services.embedding_service import EmbeddingService
 from app.services.reranker_service import RerankerService
+
 
 class RetrievalService:
 
@@ -11,29 +12,24 @@ class RetrievalService:
         db,
         video_id: UUID,
         query: str,
-        limit: int = 5,
+        candidate_limit: int = 20,
+        final_limit: int = 5,
     ):
 
-        embedding = EmbeddingService.get_embedding(
-            query
+        embedding = EmbeddingService.get_embedding(query)
+
+        semantic_chunks = await TranscriptChunkRepository.semantic_search(
+            db=db,
+            video_id=video_id,
+            embedding=embedding,
+            limit=candidate_limit,
         )
 
-        semantic_chunks = (
-            await TranscriptChunkRepository.semantic_search(
-                db=db,
-                video_id=video_id,
-                embedding=embedding,
-                limit=20,
-            )
-        )
-
-        keyword_chunks = (
-            await TranscriptChunkRepository.keyword_search(
-                db=db,
-                video_id=video_id,
-                query=query,
-                limit=20,
-            )
+        keyword_chunks = await TranscriptChunkRepository.keyword_search(
+            db=db,
+            video_id=video_id,
+            query=query,
+            limit=candidate_limit,
         )
 
         merged = {}
@@ -44,35 +40,31 @@ class RetrievalService:
         for chunk in keyword_chunks:
             merged[chunk.id] = chunk
 
-        candidates = list(
-            merged.values()
-        )
+        candidates = list(merged.values())
 
         reranked = await asyncio.to_thread(
             RerankerService.rerank,
             query=query,
             chunks=candidates,
-            top_k=limit,
+            top_k=final_limit,
         )
 
         return reranked
 
     @staticmethod
-    async def retrieve_context(
-        db,
-        video_id: UUID,
-        query: str,
-        limit: int = 5,
-    ) -> str:
+    def build_context(chunks):
 
-        chunks = await RetrievalService.retrieve(
-            db=db,
-            video_id=video_id,
-            query=query,
-            limit=limit,
-        )
+        context = []
 
-        return "\n\n".join(
-            chunk.content
-            for chunk in chunks
-        )
+        for chunk in chunks:
+
+            start = f"{int(chunk.start_time//60):02d}:{int(chunk.start_time%60):02d}"
+            end = f"{int(chunk.end_time//60):02d}:{int(chunk.end_time%60):02d}"
+
+            context.append(
+                f"""[{start} - {end}]
+                {chunk.content}
+                """
+                )
+
+        return "\n\n".join(context)

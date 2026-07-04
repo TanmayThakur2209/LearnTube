@@ -31,23 +31,23 @@ async def process(video_id: str):
             db=db,
             video_id=video_id,
         )
+        # video.status = "PROCESSING"
 
         if not video:
             print("Video not found")
             return
+        url = f"https://www.youtube.com/watch?v={video.youtube_video_id}"
+        segments = TranscriptService.get_transcript_segments(url)
+        print(len(segments))
 
-        segments = TranscriptService.get_transcript_segments(
-            video.youtube_video_id
-        )
-        print("#"*50)
-
+        for s in segments[:10]:
+            print(s)
         chunks = ChunkingService.chunk_segments(segments)
-
+        print(chunks[0])
         print("Chunking transcript...")
 
         print("Chunks:", len(chunks))
         print(chunks[0])
-
         for index, chunk in enumerate(chunks):
             
             await TranscriptChunkRepository.create(
@@ -82,8 +82,9 @@ async def process(video_id: str):
 
             except Exception as e:
                 print(e)
+                # video.status = "FAILED"
                 continue
-
+        # video.status = "PROCESSING"
         await db.commit()
 
         print("Embeddings generated!")  
