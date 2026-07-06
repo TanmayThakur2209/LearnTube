@@ -23,4 +23,3 @@ celery_app.conf.imports = (
 )
 
 from app.core.config import settings
-print("REDIS_URL =", settings.REDIS_URL)

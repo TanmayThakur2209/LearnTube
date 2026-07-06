@@ -36,16 +36,12 @@ class ChunkingService:
 
         for segment in segments:
 
-            text = segment.text
+            text = segment["text"]
 
             if start_time is None:
-                start_time = segment.start
+                start_time = segment["start"]
 
-            end_time = (
-                segment.start +
-                segment.duration
-            )
-
+            end_time = segment["end"]
             current_text.append(text)
             current_length += len(text)
 

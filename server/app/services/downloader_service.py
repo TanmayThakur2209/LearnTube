@@ -15,7 +15,8 @@ class DownloaderService:
             DownloaderService.DOWNLOAD_DIR,
             "%(id)s.%(ext)s",
         )
-
+        print("$"*50)
+        print("Cookie file:", get_cookie_file())
         opts = {
             "skip_download": True,
             "writesubtitles": True,
