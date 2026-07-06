@@ -26,6 +26,12 @@ class DownloaderService:
             "cookiefile": get_cookie_file(),
             "outtmpl": output,
             "quiet": True,
+            "no_warnings": True,
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["android"],
+                }
+            },
         }
 
         with yt_dlp.YoutubeDL(opts) as ydl:

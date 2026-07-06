@@ -1,5 +1,5 @@
 from urllib.parse import parse_qs, urlparse
-
+from app.core.cookies import get_cookie_file
 import yt_dlp
 
 
@@ -22,6 +22,7 @@ class YouTubeService:
             "quiet": True,
             "no_warnings": True,
             "skip_download": True,
+            "cookiefile": get_cookie_file(),
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
