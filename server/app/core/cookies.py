@@ -10,7 +10,7 @@ def get_cookie_file():
 
     if _cookie_file:
         return _cookie_file
-
+    
     cookies = settings.YOUTUBE_COOKIES_B64
 
     if not cookies:
