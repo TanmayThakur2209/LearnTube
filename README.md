@@ -1,6 +1,6 @@
 <h1>
 <img src="https://raw.githubusercontent.com/TanmayThakur2209/LearnTube/refs/heads/main/client/src/assets/logo1.svg" 
-       width="40" style="margin-top: 10px;"
+       width="40" style="margin-top: 20px;"
         />
 LearnTube
 </h1>
