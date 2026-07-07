@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/TanmayThakur2209/LearnTube/refs/heads/main/client/src/assets/logo1.svg" 
        width="30" 
         />
-# LearnTube
+LearnTube
 </h1>
 LearnTube is an AI-powered Retrieval-Augmented Generation (RAG) application that transforms long-form videos into an interactive knowledge base. Instead of manually searching through hours of content, users can import a YouTube video and ask natural language questions to receive context-aware answers grounded entirely in the video's transcript.
 
