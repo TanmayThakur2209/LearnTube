@@ -10,4 +10,4 @@ COPY . .
 
 RUN echo "Docker build completed"
 
-CMD ["sh", "-c", "echo Starting server... && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+CMD ["python", "-u", "-c", "print('before'); import app.main; print('after')"]
