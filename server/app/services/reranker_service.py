@@ -1,27 +1,34 @@
 from sentence_transformers import CrossEncoder
-model=None
+
+_model = None
+
 
 class RerankerService:
 
     @staticmethod
-    def rerank(
-        query: str,
-        chunks,
-        top_k: int = 5,
-    ):
+    def get_model():
+        global _model
+
+        if _model is None:
+            _model = CrossEncoder(
+                "cross-encoder/ms-marco-MiniLM-L-6-v2"
+            )
+
+        return _model
+
+    @staticmethod
+    def rerank(query, chunks, top_k=5):
 
         if not chunks:
             return []
 
+        model = RerankerService.get_model()
+
         pairs = [
-            (
-                query,
-                chunk.content,
-            )
+            (query, chunk.content)
             for chunk in chunks
         ]
 
-        model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
         scores = model.predict(
             pairs,
             show_progress_bar=False,
@@ -35,6 +42,5 @@ class RerankerService:
 
         return [
             chunk
-            for chunk, _
-            in ranked[:top_k]
+            for chunk, _ in ranked[:top_k]
         ]
