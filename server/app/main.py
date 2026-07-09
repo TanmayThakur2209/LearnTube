@@ -1,9 +1,23 @@
+print("1")
+
 from fastapi import FastAPI
+print("2")
+
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.auth import router as auth_router
+print("3")
+
 from app.core.config import settings
+print("4")
+
 from app.api.auth import router as auth_router
+print("5")
+
 from app.api.video import router as video_router
+print("6")
+
+app = FastAPI()
+
+print("7")
 
 app = FastAPI(
     title=settings.APP_NAME,
