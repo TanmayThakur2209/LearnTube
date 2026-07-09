@@ -1,22 +1,52 @@
+print("video 1")
 from fastapi import APIRouter
+
+print("video 2")
 from fastapi import Depends
+
+print("video 3")
 from fastapi import HTTPException
+
+print("video 4")
 from fastapi.responses import StreamingResponse
+
+print("video 5")
 from sqlalchemy.ext.asyncio import AsyncSession
 
+print("video 6")
 from app.db.session import get_db
-from app.dependencies.auth import (get_current_user)
-from app.models.user import User
-from app.schemas.video import (VideoImportRequest,VideoResponse,)
-from app.services.video_service import (VideoService)
 
-from uuid import UUID
+print("video 7")
+from app.dependencies.auth import get_current_user
+
+print("video 8")
+from app.models.user import User
+
+print("video 9")
+from app.schemas.video import VideoImportRequest, VideoResponse
+
+print("video 10")
+from app.services.video_service import VideoService
+
+print("video 11")
 from app.services.retrieval_service import RetrievalService
+
+print("video 12")
 from app.services.generator_service import GeneratorService
+
+print("video 13")
 from app.repositories.video_repository import VideoRepository
-from app.schemas.chat import (ChatRequest,ChatResponse,Source)
+
+print("video 14")
+from app.schemas.chat import ChatRequest, ChatResponse, Source
+
+print("video 15")
 from app.repositories.chat_message_repository import ChatMessageRepository
+
+print("video 16")
 from app.repositories.chat_session_repository import ChatSessionRepository
+
+print("video 17")
 
 router = APIRouter(
     prefix="/videos",
