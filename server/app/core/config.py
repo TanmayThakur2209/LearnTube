@@ -16,7 +16,6 @@ class Settings(BaseSettings):
 
     JWT_SECRET: str
     JWT_ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10000
 
     OPENAI_API_KEY: str = ""
     GOOGLE_API_KEY: str = ""
