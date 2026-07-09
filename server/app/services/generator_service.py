@@ -1,22 +1,10 @@
-print("gen 1", flush=True)
-
-import google
-
-print("gen 2", flush=True)
-
 from google import genai
 
-print("gen 3", flush=True)
 from app.core.config import settings
-
-print("gen 33")
-
 from app.prompts.rag_prompt import build_prompt
 
-print("gen 4")
 
 _client = None
-print("gen 5")
 
 
 class GeneratorService:
