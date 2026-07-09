@@ -1,12 +1,15 @@
-print("gen 1")
+print("gen 1", flush=True)
+
+import google
+
+print("gen 2", flush=True)
 
 from google import genai
 
-print("gen 2")
-
+print("gen 3", flush=True)
 from app.core.config import settings
 
-print("gen 3")
+print("gen 33")
 
 from app.prompts.rag_prompt import build_prompt
 
