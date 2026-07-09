@@ -1,10 +1,19 @@
+print("gen 1")
+
 from google import genai
 
+print("gen 2")
+
 from app.core.config import settings
+
+print("gen 3")
+
 from app.prompts.rag_prompt import build_prompt
 
+print("gen 4")
 
 _client = None
+print("gen 5")
 
 
 class GeneratorService:
