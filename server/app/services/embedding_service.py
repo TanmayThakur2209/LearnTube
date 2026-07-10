@@ -1,28 +1,23 @@
-from sentence_transformers import SentenceTransformer
+from google import genai
 
-_model = None
+from app.core.config import settings
+
+
+_client = genai.Client(api_key=settings.GOOGLE_API_KEY)
 
 
 class EmbeddingService:
-
-    @staticmethod
-    def get_model():
-        global _model
-
-        if _model is None:
-            _model = SentenceTransformer(
-                "BAAI/bge-small-en-v1.5"
-            )
-
-        return _model
+    MODEL = "gemini-embedding-001"
 
     @staticmethod
     def get_embedding(text: str) -> list[float]:
 
-        model = EmbeddingService.get_model()
+        response = _client.models.embed_content(
+            model=EmbeddingService.MODEL,
+            contents=text,
+            config={
+                "output_dimensionality": 768
+            },
+        )
 
-        return model.encode(
-            text,
-            normalize_embeddings=True,
-            convert_to_numpy=True,
-        ).tolist()
+        return response.embeddings[0].values

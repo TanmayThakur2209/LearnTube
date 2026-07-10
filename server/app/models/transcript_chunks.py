@@ -1,14 +1,12 @@
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, Integer, Text
-from sqlalchemy.orm import Mapped, mapped_column
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import Float
+from sqlalchemy import Float, ForeignKey, Integer, Text
+from sqlalchemy.dialects.postgresql import TSVECTOR
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
-from app.db.mixins import UUIDMixin, TimestampMixin
-from sqlalchemy import Float
-from sqlalchemy.dialects.postgresql import TSVECTOR
+from app.db.mixins import TimestampMixin, UUIDMixin
 
 
 class TranscriptChunk(
@@ -41,9 +39,9 @@ class TranscriptChunk(
         TSVECTOR,
         nullable=True,
     )
-    
+
     embedding: Mapped[list[float] | None] = mapped_column(
-        Vector(384),
+        Vector(768),
         nullable=True,
     )
 
@@ -53,6 +51,6 @@ class TranscriptChunk(
     )
 
     end_time: Mapped[float] = mapped_column(
-        Float,  
+        Float,
         nullable=False,
-    ) 
+    )

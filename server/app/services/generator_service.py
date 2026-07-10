@@ -61,6 +61,7 @@ class GeneratorService:
             model="gemini-2.5-flash",
             contents=prompt,
         )
+        print(prompt)
 
         for chunk in stream:
             if chunk.text:
