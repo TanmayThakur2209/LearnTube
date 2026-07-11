@@ -32,7 +32,3 @@ async def root():
         "message": f"{settings.APP_NAME} API is running 🚀",
         "environment": settings.APP_ENV,
     }
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
