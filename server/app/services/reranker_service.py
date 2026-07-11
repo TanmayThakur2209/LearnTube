@@ -1,8 +1,3 @@
-from sentence_transformers import CrossEncoder
-
-_model = None
-
-
 class RerankerService:
 
     @staticmethod
