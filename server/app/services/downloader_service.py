@@ -26,6 +26,11 @@ class DownloaderService:
             "outtmpl": output,
             "quiet": True,
             "no_warnings": True,
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["web_creator"],
+                }
+    },
         }
 
         with yt_dlp.YoutubeDL(opts) as ydl:
