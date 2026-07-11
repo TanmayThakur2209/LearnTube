@@ -21,7 +21,8 @@ class YouTubeService:
         ydl_opts = {
             "quiet": True,
             "no_warnings": True,
-            "skip_download": True,
+            # "skip_download": True,
+            "extract_flat": True,
             "cookiefile": get_cookie_file(),
         }
 
@@ -29,7 +30,7 @@ class YouTubeService:
             info = ydl.extract_info(url, download=False)
 
         return {
-            "youtube_video_id": info["id"],
+            "youtube_video_id": info["id"], 
             "title": info.get("title"),
             "description": info.get("description"),
             "channel_name": info.get("uploader"),
