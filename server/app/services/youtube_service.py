@@ -19,9 +19,11 @@ class YouTubeService:
     @staticmethod
     def get_video_info(url: str) -> dict:
         ydl_opts = {
-            "quiet": True,
-            "no_warnings": True,
+            # "quiet": True,
+            # "no_warnings": True,
             # "skip_download": True,
+            "quiet": False,
+            "verbose": True,
             "extract_flat": True,
             "cookiefile": get_cookie_file(),
         }
