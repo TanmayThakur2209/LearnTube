@@ -15,8 +15,7 @@ class DownloaderService:
             DownloaderService.DOWNLOAD_DIR,
             "%(id)s.%(ext)s",
         )
-        print("$"*50)
-        print("Cookie file:", get_cookie_file())
+
         opts = {
             "skip_download": True,
             "writesubtitles": True,
@@ -27,15 +26,9 @@ class DownloaderService:
             "outtmpl": output,
             "quiet": True,
             "no_warnings": True,
-            "extractor_args": {
-                "youtube": {
-                    "player_client": ["android"],
-                }
-            },
         }
 
         with yt_dlp.YoutubeDL(opts) as ydl:
-
             info = ydl.extract_info(
                 video_url,
                 download=True,
@@ -43,10 +36,14 @@ class DownloaderService:
 
         video_id = info["id"]
 
-        path = f"/tmp/{video_id}.en.vtt"
+        candidates = [
+            f"/tmp/{video_id}.en.vtt",
+            f"/tmp/{video_id}.en-US.vtt",
+            f"/tmp/{video_id}.en-GB.vtt",
+        ]
 
-        if not os.path.exists(path):
-            raise Exception("Subtitle not found")
+        for path in candidates:
+            if os.path.exists(path):
+                return path
 
-        return path
-    
+        raise Exception("English subtitle not found.")
