@@ -28,7 +28,7 @@ class DownloaderService:
             "no_warnings": True,
             "extractor_args": {
                 "youtube": {
-                    "player_client": ["web_creator"],
+                    "player_client": ["android"],
                 }
     },
         }
