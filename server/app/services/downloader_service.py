@@ -22,6 +22,10 @@ class DownloaderService:
             "writeautomaticsub": True,
             "subtitleslangs": ["en"],
             "subtitlesformat": "vtt",
+
+            "format": "none",     
+            "simulate": True,    
+
             "cookiefile": get_cookie_file(),
             "outtmpl": output,
             "quiet": True,
@@ -30,7 +34,7 @@ class DownloaderService:
                 "youtube": {
                     "player_client": ["ios", "android", "web_safari"],
                 }
-                },
+            },
         }
 
         with yt_dlp.YoutubeDL(opts) as ydl:
