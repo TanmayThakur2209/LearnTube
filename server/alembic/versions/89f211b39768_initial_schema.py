@@ -1,19 +1,19 @@
 """initial schema
 
-Revision ID: 853d687fa9e1
+Revision ID: 89f211b39768
 Revises: 
-Create Date: 2026-07-11 02:30:17.841971
+Create Date: 2026-06-20 03:29:01.807018
 
 """
 from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-from pgvector.sqlalchemy import Vector
 from sqlalchemy.dialects import postgresql
+from pgvector.sqlalchemy import Vector
 
 # revision identifiers, used by Alembic.
-revision: str = '853d687fa9e1'
+revision: str = '89f211b39768'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -70,7 +70,7 @@ def upgrade() -> None:
     sa.Column('chunk_index', sa.Integer(), nullable=False),
     sa.Column('content', sa.Text(), nullable=False),
     sa.Column('search_vector', postgresql.TSVECTOR(), nullable=True),
-    sa.Column("embedding", Vector(768), nullable=True),
+    sa.Column('embedding',Vector(dim=384),nullable=True),
     sa.Column('start_time', sa.Float(), nullable=False),
     sa.Column('end_time', sa.Float(), nullable=False),
     sa.Column('id', sa.UUID(), nullable=False),
@@ -80,6 +80,24 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_transcript_chunks_video_id'), 'transcript_chunks', ['video_id'], unique=False)
+    op.execute("""
+    CREATE INDEX idx_transcript_chunks_search
+    ON transcript_chunks
+    USING GIN(search_vector);
+    """)
+
+    op.execute("""
+    CREATE TRIGGER transcript_chunks_search_vector_update
+    BEFORE INSERT OR UPDATE
+    ON transcript_chunks
+    FOR EACH ROW
+    EXECUTE FUNCTION
+    tsvector_update_trigger(
+        search_vector,
+        'pg_catalog.english',
+        content
+    );
+    """)
     op.create_table('transcripts',
     sa.Column('video_id', sa.UUID(), nullable=False),
     sa.Column('content', sa.Text(), nullable=False),
@@ -112,6 +130,16 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_transcripts_video_id'), table_name='transcripts')
     op.drop_table('transcripts')
     op.drop_index(op.f('ix_transcript_chunks_video_id'), table_name='transcript_chunks')
+    op.execute("""
+    DROP TRIGGER IF EXISTS
+    transcript_chunks_search_vector_update
+    ON transcript_chunks;
+    """)
+
+    op.execute("""
+    DROP INDEX IF EXISTS
+    idx_transcript_chunks_search;
+    """)
     op.drop_table('transcript_chunks')
     op.drop_index(op.f('ix_chat_sessions_video_id'), table_name='chat_sessions')
     op.drop_index(op.f('ix_chat_sessions_user_id'), table_name='chat_sessions')

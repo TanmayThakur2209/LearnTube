@@ -3,22 +3,12 @@ from google import genai
 from app.core.config import settings
 from app.prompts.rag_prompt import build_prompt
 
-
-_client = None
+client = genai.Client(
+    api_key=settings.GOOGLE_API_KEY,
+)
 
 
 class GeneratorService:
-
-    @staticmethod
-    def get_client():
-        global _client
-
-        if _client is None:
-            _client = genai.Client(
-                api_key=settings.GOOGLE_API_KEY,
-            )
-
-        return _client
 
     @staticmethod
     def generate(
@@ -33,7 +23,9 @@ class GeneratorService:
             history=history,
         )
 
-        client = GeneratorService.get_client()
+        print("=" * 80)
+        print(prompt)
+        print("=" * 80)
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
@@ -48,21 +40,20 @@ class GeneratorService:
         question: str,
         history: str,
     ):
-
         prompt = build_prompt(
             context=context,
             question=question,
             history=history,
         )
 
-        client = GeneratorService.get_client()
+        print("=" * 80)
+        print(prompt)
+        print("=" * 80)
 
         stream = client.models.generate_content_stream(
             model="gemini-2.5-flash",
             contents=prompt,
         )
-        print(prompt)
-
         for chunk in stream:
             if chunk.text:
                 yield chunk.text

@@ -1,4 +1,4 @@
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import urlparse, parse_qs
 
 from googleapiclient.discovery import build
 
@@ -11,10 +11,7 @@ class YouTubeService:
     def extract_video_id(url: str) -> str:
         parsed = urlparse(url)
 
-        if parsed.hostname in (
-            "youtube.com",
-            "www.youtube.com",
-        ):
+        if parsed.hostname in ("youtube.com", "www.youtube.com"):
             return parse_qs(parsed.query)["v"][0]
 
         if parsed.hostname == "youtu.be":
@@ -23,7 +20,7 @@ class YouTubeService:
         raise ValueError("Invalid YouTube URL")
 
     @staticmethod
-    def get_video_info(url: str) -> dict:
+    def get_video_info(url: str):
 
         video_id = YouTubeService.extract_video_id(url)
 
@@ -42,30 +39,15 @@ class YouTubeService:
             .execute()
         )
 
-        items = response.get("items", [])
-
-        if not items:
+        if not response["items"]:
             raise Exception("Video not found")
 
-        snippet = items[0]["snippet"]
-
-        thumbnails = snippet.get("thumbnails", {})
-
-        thumbnail = (
-            thumbnails.get("maxres")
-            or thumbnails.get("standard")
-            or thumbnails.get("high")
-            or thumbnails.get("medium")
-            or thumbnails.get("default")
-        )
+        snippet = response["items"][0]["snippet"]
 
         return {
             "youtube_video_id": video_id,
             "title": snippet["title"],
-            "description": snippet.get(
-                "description",
-                "",
-            ),
+            "description": snippet["description"],
             "channel_name": snippet["channelTitle"],
-            "thumbnail_url": thumbnail["url"],
+            "thumbnail_url": snippet["thumbnails"]["high"]["url"],
         }

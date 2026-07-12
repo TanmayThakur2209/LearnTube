@@ -1,38 +1,41 @@
 from logging.config import fileConfig
 
+from sqlalchemy import engine_from_config, pool
+
 from alembic import context
-from sqlalchemy import create_engine, pool
 
 from app.core.config import settings
 from app.db.base import Base
+from app.db import models
 
-# Import all models so Alembic detects them
-from app.models.user import User
-from app.models.video import Video
-from app.models.transcript import Transcript
-from app.models.transcript_chunks import TranscriptChunk
-from app.models.chat_session import ChatSession
-from app.models.chat_message import ChatMessage
-
+# Alembic Config object
 config = context.config
 
-# Override the URL from alembic.ini
-config.set_main_option(
-    "sqlalchemy.url",
-    settings.ALEMBIC_DATABASE_URL,
+ALEMBIC_DATABASE_URL = settings.DATABASE_URL.replace(
+    "postgresql+asyncpg://",
+    "postgresql://",
 )
 
+config.set_main_option(
+    "sqlalchemy.url",
+    ALEMBIC_DATABASE_URL,
+)
+
+# Configure logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# Metadata for autogeneration
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
     """Run migrations in offline mode."""
 
+    url = config.get_main_option("sqlalchemy.url")
+
     context.configure(
-        url=settings.ALEMBIC_DATABASE_URL,
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         compare_type=True,
@@ -46,8 +49,9 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     """Run migrations in online mode."""
 
-    connectable = create_engine(
-        settings.ALEMBIC_DATABASE_URL,
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix="sqlalchemy.",
         poolclass=pool.NullPool,
         future=True,
     )

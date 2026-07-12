@@ -22,22 +22,13 @@ class DownloaderService:
             "writeautomaticsub": True,
             "subtitleslangs": ["en"],
             "subtitlesformat": "vtt",
-
-            "format": "none",     
-            "simulate": True,    
-
             "cookiefile": get_cookie_file(),
             "outtmpl": output,
             "quiet": True,
-            "no_warnings": True,
-            "extractor_args": {
-                "youtube": {
-                    "player_client": ["ios", "android", "web_safari"],
-                }
-            },
         }
 
         with yt_dlp.YoutubeDL(opts) as ydl:
+
             info = ydl.extract_info(
                 video_url,
                 download=True,
@@ -45,14 +36,10 @@ class DownloaderService:
 
         video_id = info["id"]
 
-        candidates = [
-            f"/tmp/{video_id}.en.vtt",
-            f"/tmp/{video_id}.en-US.vtt",
-            f"/tmp/{video_id}.en-GB.vtt",
-        ]
+        path = f"/tmp/{video_id}.en.vtt"
 
-        for path in candidates:
-            if os.path.exists(path):
-                return path
+        if not os.path.exists(path):
+            raise Exception("Subtitle not found")
 
-        raise Exception("English subtitle not found.")
+        return path
+    
