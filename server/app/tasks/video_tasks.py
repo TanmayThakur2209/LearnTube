@@ -65,16 +65,20 @@ async def process(video_id: str):
             video_id=video.id,
         )
 
-        for i, chunk in enumerate(saved_chunks):
-            try:
+        texts = [
+            chunk.content
+            for chunk in saved_chunks
+        ]
 
-                chunk.embedding = EmbeddingService.get_embedding(
-                    chunk.content
-                )
+        try:
+            embeddings = EmbeddingService.get_embeddings(texts)
 
-            except Exception as e:
-                print(e)
-                continue
-        await db.commit()
+            for chunk, embedding in zip(saved_chunks, embeddings):
+                chunk.embedding = embedding
+
+            await db.commit()
+
+        except Exception as e:
+            print(e)
 
         print("Embeddings generated!")  
