@@ -70,7 +70,7 @@ def upgrade() -> None:
     sa.Column('chunk_index', sa.Integer(), nullable=False),
     sa.Column('content', sa.Text(), nullable=False),
     sa.Column('search_vector', postgresql.TSVECTOR(), nullable=True),
-    sa.Column('embedding',Vector(dim=384),nullable=True),
+    sa.Column('embedding',Vector(dim=768),nullable=True),
     sa.Column('start_time', sa.Float(), nullable=False),
     sa.Column('end_time', sa.Float(), nullable=False),
     sa.Column('id', sa.UUID(), nullable=False),
