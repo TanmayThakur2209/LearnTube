@@ -28,9 +28,9 @@ class DownloaderService:
             "no_warnings": True,
             "extractor_args": {
                 "youtube": {
-                    "player_client": ["android","web"],
+                    "player_client": ["ios", "android", "web_safari"],
                 }
-    },
+                },
         }
 
         with yt_dlp.YoutubeDL(opts) as ydl:

@@ -23,6 +23,11 @@ class YouTubeService:
             "no_warnings": True,
             "skip_download": True,
             "cookiefile": get_cookie_file(),
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["ios", "android", "web_safari"],
+                }
+                },
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
