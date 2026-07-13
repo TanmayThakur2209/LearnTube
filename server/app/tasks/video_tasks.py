@@ -65,10 +65,7 @@ async def process(video_id: str):
             video_id=video.id,
         )
 
-        texts = [
-            chunk.content
-            for chunk in saved_chunks
-        ]
+        texts = [chunk.content for chunk in saved_chunks]
 
         try:
             embeddings = EmbeddingService.get_embeddings(texts)
