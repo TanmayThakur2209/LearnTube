@@ -15,7 +15,7 @@ class TranscriptService:
 
         segments = []
         previous = ""
-
+    
         for caption in webvtt.read(subtitle):
             start = TranscriptService.to_seconds(caption.start)
             end = TranscriptService.to_seconds(caption.end)

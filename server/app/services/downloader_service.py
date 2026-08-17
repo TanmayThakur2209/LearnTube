@@ -23,7 +23,10 @@ class DownloaderService:
             "subtitleslangs": ["en"],
             "subtitlesformat": "vtt",
             "cookiefile": get_cookie_file(),
-            "outtmpl": output,
+            "outtmpl": output,  
+            "js_runtimes": {
+                "deno": None,
+                },
             "quiet": True,
         }
 
