@@ -24,9 +24,6 @@ class DownloaderService:
             "subtitlesformat": "vtt",
             "cookiefile": get_cookie_file(),
             "outtmpl": output,  
-            "js_runtimes": {
-                "deno": None,
-                },
             "quiet": True,
         }
 
